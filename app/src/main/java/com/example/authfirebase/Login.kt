@@ -1,13 +1,20 @@
 package com.example.authfirebase
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class Login : AppCompatActivity() {
+
+    var fbAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,12 +26,26 @@ class Login : AppCompatActivity() {
 
             Log.d("login", "correo: $email/***")
 
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email,pass)
+            signIn(email,pass)
 
         }
 
         btn_back_registrar.setOnClickListener {
             finish()
         }
+    }
+    fun signIn(email:String,pass:String){
+
+        fbAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(this, OnCompleteListener<AuthResult>{
+            task ->
+            if(task.isSuccessful){
+                var intent = Intent(this,logged::class.java)
+                intent.putExtra("id",fbAuth.currentUser?.email)
+                startActivity(intent)
+            }
+            else{
+                Log.d("login","ERROR WE")
+            }
+        })
     }
 }
