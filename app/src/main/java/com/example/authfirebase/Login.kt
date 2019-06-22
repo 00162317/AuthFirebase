@@ -24,7 +24,7 @@ class Login : AppCompatActivity() {
             val email = et_email_login.text.toString()
             val pass = et_pass_login.text.toString()
 
-            Log.d("login", "correo: $email/***")
+            Log.d("loginx", "correo: $email/***")
 
             signIn(email,pass)
 
@@ -33,18 +33,29 @@ class Login : AppCompatActivity() {
         btn_back_registrar.setOnClickListener {
             finish()
         }
+        btn_forget_passs.setOnClickListener {
+            startActivity(Intent(this,forgetPass::class.java))
+        }
     }
+
     fun signIn(email:String,pass:String){
 
         fbAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(this, OnCompleteListener<AuthResult>{
             task ->
             if(task.isSuccessful){
+                Log.d("loginx","HEY: ${fbAuth.currentUser?.email}")
                 var intent = Intent(this,logged::class.java)
                 intent.putExtra("id",fbAuth.currentUser?.email)
                 startActivity(intent)
+                if(fbAuth!=null){
+                    Log.d("loginx","User SIGNED")
+                }
+                else{
+                    Log.d("loginx","User NO SIGNED")
+                }
             }
             else{
-                Log.d("login","ERROR WE")
+                Log.d("loginx","ERROR WE")
             }
         })
     }

@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    val auth = FirebaseAuth.getInstance()
+    val user = auth.currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("mains","email es: "+email)
         Log.d("mains","pass es: $pass")
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,pass)
+        auth.createUserWithEmailAndPassword(email,pass)
             .addOnCompleteListener {
                 if(!it.isSuccessful){
                     return@addOnCompleteListener
@@ -40,6 +44,12 @@ class MainActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 Log.d("mains","NO SE CREO: ${it.message}")
+            }
+        user?.sendEmailVerification()
+            ?.addOnCompleteListener{task ->
+                if(task.isSuccessful){
+                    Log.d("mains","CORREO ENVIADO")
+                }
             }
     }
 }
