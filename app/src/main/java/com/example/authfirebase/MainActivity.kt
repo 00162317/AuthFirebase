@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        tv_welcome.text=user?.email
+
         btn_registrar.setOnClickListener {
             registrar()
         }
@@ -48,7 +50,10 @@ class MainActivity : AppCompatActivity() {
         user?.sendEmailVerification()
             ?.addOnCompleteListener{task ->
                 if(task.isSuccessful){
-                    Log.d("mains","CORREO ENVIADO")
+                    Log.d("mains-correo","CORREO ENVIADO")
+                }
+                else{
+                    Log.d("mains-correo","CORREO NO ENVIADO")
                 }
             }
     }

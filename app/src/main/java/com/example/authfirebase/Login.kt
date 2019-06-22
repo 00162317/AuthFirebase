@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -58,5 +59,18 @@ class Login : AppCompatActivity() {
                 Log.d("loginx","ERROR WE")
             }
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val current = fbAuth.currentUser
+    }
+
+    private fun logged(user:FirebaseUser?){
+        if(user!=null){
+            var intent = Intent(this,logged::class.java)
+            intent.putExtra("id",fbAuth.currentUser?.email)
+            startActivity(intent)
+        }
     }
 }
